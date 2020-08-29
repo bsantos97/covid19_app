@@ -1,5 +1,6 @@
-import 'package:covidapiglob/src/models/respuesta_model.dart';
 import 'package:flutter/material.dart';
+
+import 'package:covidapiglob/src/models/respuesta_model.dart';
 
 class BackgroundPage extends StatefulWidget {
   //const BackgroundPage({Key key}) : super(key: key);
@@ -10,6 +11,7 @@ class BackgroundPage extends StatefulWidget {
   final String text;
   final Widget child;
 
+  //Constructor
   BackgroundPage(
       {@required this.colorT,
       @required this.colorB,
@@ -23,19 +25,24 @@ class BackgroundPage extends StatefulWidget {
 
 class _BackgroundPageState extends State<BackgroundPage>
     with SingleTickerProviderStateMixin {
+//Utilizado para integrar un solo objeto animado en page
+
   final _titleStyle = TextStyle(
     color: Colors.white,
     fontSize: 40.0,
     fontWeight: FontWeight.bold,
   );
 
+//Cada cuanto se realiza la transicion
   final Tween<double> turnsTween = Tween<double>(
     begin: 1,
     end: 5,
   );
 
+//Ctrl de la Animacion
   AnimationController _animationCtrl;
 
+//Ciclo de vida de un Widget
   initState() {
     _animationCtrl = AnimationController(
       vsync: this,
@@ -60,7 +67,7 @@ class _BackgroundPageState extends State<BackgroundPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                widget.caso.value.toString(),
+                widget.caso.value.toString(),//Propiedad de nuestra clase que va a cambiar dependiendo del estado
                 style: _titleStyle,
               ),
               Text(
@@ -96,17 +103,19 @@ class _BackgroundPageState extends State<BackgroundPage>
       iconSize: 300,
       onPressed: () {
         print('T');
-        Navigator.pushNamed(context, 'casos',
-                      arguments: widget.caso);
+        //Navegar entre pantalla
+        Navigator.pushNamed(context, 'casos', arguments: widget.caso);
       },
       icon: Stack(alignment: Alignment.center, children: <Widget>[
         _rotateChild(Image.asset(
           'assets/covid19.png',
         )),
-        Text(
-          'Click!',
-          style: TextStyle(color: Colors.white, fontSize: 30.0,fontWeight: FontWeight.bold,)
-        )
+        Text('Click!',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+            ))
       ]),
     );
 

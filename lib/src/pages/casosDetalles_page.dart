@@ -1,7 +1,9 @@
+import 'package:covidapiglob/src/pages/country_page.dart';
+import 'package:flutter/material.dart';
+
 import 'package:covidapiglob/src/models/casoDetails_model.dart';
 import 'package:covidapiglob/src/models/respuesta_model.dart';
 import 'package:covidapiglob/src/providers/covid19_provider.dart';
-import 'package:flutter/material.dart';
 
 class CasoPage extends StatefulWidget {
   @override
@@ -9,53 +11,48 @@ class CasoPage extends StatefulWidget {
 }
 
 class _CasoPageState extends State<CasoPage> {
- 
-
   final _covid19 = Covid19Provider();
 
   final List<CasoDetailsCountry> paises = List();
 
-   //Permite controlar un scroll de cualquier Widget Scrollable
+  //Permite controlar un scroll de cualquier Widget Scrollable
   //Deben ser destruidos cuando se destruya la pagina
   ScrollController _scrollCtrl = new ScrollController();
 
-    //Se llama cuando la pag deja de existir en el Stack
+  //Se llama cuando la pag deja de existir en el Stack
   @override
   void dispose() {
     super.dispose();
     _scrollCtrl.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    //Obtener el algumento desde el contexto
     Caso caso = ModalRoute.of(context).settings.arguments;
     debugPrint(' ******** ${{caso.value.toString()}}');
     var det = caso.detail.toString();
-    var caseDRC=det.split('/');
-    var caseD=caseDRC.last;
+    var caseDRC = det.split('/');
+    var caseD = caseDRC.last;
     debugPrint(' ******** ${{det}}');
     debugPrint(' ******** ${{caseDRC}}');
     debugPrint(' ******** ${{caseD}}');
 
-
     return Scaffold(
-      body: 
-       SingleChildScrollView(
-                child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
-            //crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _createImageEcuador(),
-              // _createTitles(),
-              _createText(),
-              _createText(),
-              _createText(),
-              Container(child: _createListCountries(caseD)),
-            ],
-          ),
-       ),
-    
+      body: SingleChildScrollView(
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.start,
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _createImageEcuador(),
+            // _createTitles(),
+            _createText(),
+            // _createText(),
+            // _createText(),
+            Container(child: _createListCountries(caseD)),
+          ],
+        ),
+      ),
     );
   }
 
@@ -65,7 +62,7 @@ class _CasoPageState extends State<CasoPage> {
         width: double.infinity,
         child: FadeInImage(
             fit: BoxFit.cover,
-            placeholder: AssetImage('assets/covid19.png'),
+            placeholder: AssetImage('assets/load.gif'),
             image: NetworkImage(
               'https://covid19.mathdro.id/api/countries/Ecuador/og',
             )),
@@ -73,9 +70,8 @@ class _CasoPageState extends State<CasoPage> {
     );
   }
 
-Widget _createListCountries(caseD) {
+  Widget _createListCountries(caseD) {
     //Usando el valor de caso
-
     return FutureBuilder(
       future: _covid19.getCountriesByCaso(caseD),
       builder: (BuildContext context,
@@ -93,25 +89,23 @@ Widget _createListCountries(caseD) {
     );
   }
 
-  Widget _createListView(lista){
-
-
+  Widget _createListView(lista) {
     return ListView.builder(
       shrinkWrap: true,
       controller: _scrollCtrl,
       itemCount: lista.length,
-      itemBuilder: (BuildContext context, int index) { 
-          return _createTitles(lista[index]);
-        },
+      itemBuilder: (BuildContext context, int index) {
+        return _createTitles(lista[index], index);
+      },
     );
   }
-  
-  Widget _createTitles(elemento) {
 
+  Widget _createTitles(elemento, index) {
+    print(new DateTime.fromMillisecondsSinceEpoch(elemento.lastUpdate));
+    print(new DateTime.fromMicrosecondsSinceEpoch(elemento.lastUpdate));
     debugPrint('Create ${{elemento}}');
-    return SafeArea(
+    var my_w = SafeArea(
       child: Container(
-        
         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -122,70 +116,44 @@ Widget _createListCountries(caseD) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Addadds Lassd Padasdd',
+                    "${elemento.provinceState} , ${elemento.countryRegion}",
                     style:
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 7.0),
                   Text(
-                    'Kasdasdasd, Dsdasdasd',
+                    'Ultima actualizacion: ${new DateTime.fromMillisecondsSinceEpoch(elemento.lastUpdate)}',
                     style: TextStyle(fontSize: 18.0, color: Colors.grey),
                   )
                 ],
               ),
             ),
             Icon(
-              Icons.star,
+              Icons.crop_original,
               color: Colors.red,
               size: 35.0,
             ),
-            Text('41',
+            Text((index + 1).toString(),
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
     );
-  }
 
-  Widget _createActionsButton() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _createAction(Icons.call, 'Call'),
-          _createAction(Icons.near_me, 'Route'),
-          _createAction(Icons.share, 'Share'),
-        ],
-      ),
+    return GestureDetector(
+      onTap: () {
+        print("TAAPPPPP!!!");
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => CountryPage(data: elemento)));
+      },
+      onDoubleTap: () {
+        print("DOOUBBLLLEEE TAAPPP!!!!");
+      },
+      child: my_w,
     );
   }
 
-  Widget _createAction(IconData icon, String action) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        IconButton(
-          color: Colors.blueAccent,
-          splashColor: Colors.greenAccent,
-          icon: Icon(
-            icon,
-            size: 40.0,
-          ),
-          onPressed: () {
-            print('$action me maybe');
-          },
-        ),
-        Text(
-          action,
-          style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
+  
 
   Widget _createText() {
     return SafeArea(

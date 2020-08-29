@@ -9,8 +9,11 @@ CasoDetailsCountry casoDetailsCountryFromJson(String str) => CasoDetailsCountry.
 String casoDetailsCountryToJson(CasoDetailsCountry data) => json.encode(data.toJson());
 
 class Countries {
+
   List<CasoDetailsCountry> paises=new List();
+  
   Countries();
+  
   Countries.fromJSON_List(List<dynamic> jsonList){
     if(jsonList!=null){
       String country="";

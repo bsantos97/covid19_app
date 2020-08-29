@@ -1,4 +1,5 @@
 import 'package:covidapiglob/src/pages/casosDetalles_page.dart';
+import 'package:covidapiglob/src/pages/country_page.dart';
 import 'package:covidapiglob/src/pages/home_page.dart';
 import 'package:flutter/material.dart';
  
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (BuildContext context)=>HomePage(),
         'casos':(BuildContext context)=>CasoPage(),
+        'country':(BuildContext context)=>CountryPage(),
         //Ruta nueva
       },
     );
