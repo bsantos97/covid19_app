@@ -1,9 +1,12 @@
-import 'package:covidapiglob/src/components/backgroundPage.dart';
-import 'package:covidapiglob/src/models/respuesta_model.dart';
 import 'package:flutter/material.dart';
 
+import 'package:covidapiglob/src/components/backgroundPage.dart';
+import 'package:covidapiglob/src/models/respuesta_model.dart';
+
+
 class PageSwiper extends StatelessWidget {
-  final Respuesta data;
+
+  final Respuesta data;//Null
 
   PageSwiper({@required this.data});
 
