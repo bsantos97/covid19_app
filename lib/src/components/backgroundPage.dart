@@ -23,6 +23,7 @@ class BackgroundPage extends StatefulWidget {
 
 class _BackgroundPageState extends State<BackgroundPage>
     with SingleTickerProviderStateMixin {
+      //Insertar un widget que contiene una animacion
   final _titleStyle = TextStyle(
     color: Colors.white,
     fontSize: 40.0,

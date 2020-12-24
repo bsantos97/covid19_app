@@ -1,5 +1,6 @@
 import 'package:covidapiglob/src/models/casoDetails_model.dart';
 import 'package:covidapiglob/src/models/respuesta_model.dart';
+import 'package:covidapiglob/src/pages/country_page.dart';
 import 'package:covidapiglob/src/providers/covid19_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -49,8 +50,8 @@ class _CasoPageState extends State<CasoPage> {
               _createImageEcuador(),
               // _createTitles(),
               _createText(),
-              _createText(),
-              _createText(),
+              // _createText(),
+              // _createText(),
               Container(child: _createListCountries(caseD)),
             ],
           ),
@@ -65,7 +66,7 @@ class _CasoPageState extends State<CasoPage> {
         width: double.infinity,
         child: FadeInImage(
             fit: BoxFit.cover,
-            placeholder: AssetImage('assets/covid19.png'),
+            placeholder: AssetImage('assets/load.gif'),
             image: NetworkImage(
               'https://covid19.mathdro.id/api/countries/Ecuador/og',
             )),
@@ -101,15 +102,15 @@ Widget _createListCountries(caseD) {
       controller: _scrollCtrl,
       itemCount: lista.length,
       itemBuilder: (BuildContext context, int index) { 
-          return _createTitles(lista[index]);
+          return _createTitles(lista[index],index);
         },
     );
   }
   
-  Widget _createTitles(elemento) {
+  Widget _createTitles(elemento,ind) {
 
-    debugPrint('Create ${{elemento}}');
-    return SafeArea(
+    debugPrint('Create ${{elemento.deaths}}');
+    var my_w = SafeArea(
       child: Container(
         
         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
@@ -122,70 +123,45 @@ Widget _createListCountries(caseD) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Addadds Lassd Padasdd',
+                    '${elemento.provinceState}, ${elemento.countryRegion}',
                     style:
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 7.0),
                   Text(
-                    'Kasdasdasd, Dsdasdasd',
+                    'Fecha actualizada: ${new DateTime.fromMillisecondsSinceEpoch(elemento.lastUpdate)}',
                     style: TextStyle(fontSize: 18.0, color: Colors.grey),
                   )
                 ],
               ),
             ),
             Icon(
-              Icons.star,
-              color: Colors.red,
+              Icons.crop_original,
+              color: Colors.blueAccent,
               size: 35.0,
             ),
-            Text('41',
+            Text('${ind+1}',
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
     );
-  }
+  
+    return GestureDetector(
+      onDoubleTap: (){
+        print("DOOUBLE TAP!!!");
 
-  Widget _createActionsButton() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _createAction(Icons.call, 'Call'),
-          _createAction(Icons.near_me, 'Route'),
-          _createAction(Icons.share, 'Share'),
-        ],
-      ),
+      },
+      onTap: (){
+        print('TAP!!!!');
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => CountryPage(data:elemento)));
+      },
+      child: my_w,
     );
   }
 
-  Widget _createAction(IconData icon, String action) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        IconButton(
-          color: Colors.blueAccent,
-          splashColor: Colors.greenAccent,
-          icon: Icon(
-            icon,
-            size: 40.0,
-          ),
-          onPressed: () {
-            print('$action me maybe');
-          },
-        ),
-        Text(
-          action,
-          style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
 
   Widget _createText() {
     return SafeArea(

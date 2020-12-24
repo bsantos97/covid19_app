@@ -23,7 +23,9 @@ class HomePage extends StatelessWidget {
           return PageSwiper( data: snapshot.data,);
         }else{
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
